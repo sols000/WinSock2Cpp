@@ -1,5 +1,8 @@
 #include "ServerNetwork.h"
 
+#include "picojson.h"
+//using namespace picojson;
+
 unsigned int ServerNetwork::client_id = 0;
 ServerNetwork::ServerNetwork(void)
 {
@@ -120,9 +123,11 @@ bool ServerNetwork::acceptNewClient(unsigned int & id)
 
 void ServerNetwork::update()
 {
+	static int CountSend = 0;
 	int ErrorCode = 0;
 	while (true)
 	{
+		Sleep(1);
 		if (this->acceptNewClient(client_id))//Not block
 		{
 			printf("client %d has been connected to the server\n", client_id);
@@ -138,6 +143,19 @@ void ServerNetwork::update()
 				//memcpy(RecvBuffer, Data , strlen(Data)+1);
 				RecvBuffer[res] = '\0';
 				std::string JsonCommandData(RecvBuffer);
+				picojson::value valueTemp;
+				std::string err = picojson::parse(valueTemp, JsonCommandData);
+				if (!err.empty())
+				{
+					//Êý¾ÝÓÐ´í
+					std::cout << "Parse:"<<err << std::endl;
+				}
+				else
+				{
+					double TempValue = valueTemp.get("Data").get<double>(); 
+					printf("Data is:%lf\n", TempValue);
+
+				}
 				printf("rec:%d\n", res);
 			}
 			else if (res == -1)
@@ -168,6 +186,19 @@ void ServerNetwork::update()
 			{
 				printf("rec Error:%d£¬code %d\n", res, WSAGetLastError());
 			}
+
+			//TestSendData
+			CountSend++;
+			if (CountSend % 100 == 0)
+			{
+				
+				picojson::object tempObj;
+				tempObj["ReturnType"] = picojson::value((double)123);
+				picojson::value SendValue(tempObj);
+				std::string StrSend = SendValue.serialize();
+				send(it->second, StrSend.c_str(), (int)StrSend.length(),0);
+			}
+
 		}
 	}
 }

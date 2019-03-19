@@ -2,15 +2,15 @@
 #include"ServerNetwork.h"
 #include<process.h>
 #include<thread>
-void serverLoop(void *);
+#include <iostream>
+
 ServerNetwork* server;
-ClientNetwork* client;
 int main(int argc, char *argv[]) {
 
+	//std::cerr << "Server Start\n";
 	server = new ServerNetwork();
 	server->StartTVServer();
 
-	//client = new ClientNetwork();
 
 	system("Pause");
 }

@@ -22,6 +22,7 @@
     <ProjectGuid>{7D6C1A79-23B6-4C40-8346-7F2201DC70CA}</ProjectGuid>
     <RootNamespace>ServerAndClient</RootNamespace>
     <WindowsTargetPlatformVersion>10.0.17763.0</WindowsTargetPlatformVersion>
+    <ProjectName>WinSock2Cpp</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -119,6 +120,7 @@
     <ClInclude Include="ClientNetwork.h" />
     <ClInclude Include="NetworkData.h" />
     <ClInclude Include="NetworkService.h" />
+    <ClInclude Include="picojson.h" />
     <ClInclude Include="ServerNetwork.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
