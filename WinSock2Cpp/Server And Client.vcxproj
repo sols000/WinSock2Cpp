@@ -82,6 +82,7 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
+      <AdditionalIncludeDirectories>E:\WindowsSDK\NewNoloDev\CppCommon;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -120,8 +121,12 @@
     <ClInclude Include="ClientNetwork.h" />
     <ClInclude Include="NetworkData.h" />
     <ClInclude Include="NetworkService.h" />
-    <ClInclude Include="picojson.h" />
     <ClInclude Include="ServerNetwork.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\WindowsSDK\NewNoloDev\CppCommon\CppCommon.vcxproj">
+      <Project>{38bcece8-0de8-498b-8464-c5041cc50f0e}</Project>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

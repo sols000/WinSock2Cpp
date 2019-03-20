@@ -7,7 +7,7 @@
 #include <thread>
 
 #pragma comment (lib, "Ws2_32.lib")
-#define DEFAULT_BUFLEN 256
+#define DEFAULT_BUFLEN 1024
 #define DEFAULT_PORT "15789"
 
 class ServerNetwork
@@ -45,6 +45,7 @@ private:
 	//总共创建的对话数目
 	static unsigned int client_id;
 	//接收缓冲区
-	char RecvBuffer[DEFAULT_BUFLEN];
+	//char RecvBuffer[DEFAULT_BUFLEN];
+	char *RecvBuffer;
 
 };

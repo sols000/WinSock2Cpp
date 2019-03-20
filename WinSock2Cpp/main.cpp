@@ -11,6 +11,5 @@ int main(int argc, char *argv[]) {
 	server = new ServerNetwork();
 	server->StartTVServer();
 
-
-	system("Pause");
+	getchar();
 }

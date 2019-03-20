@@ -1,11 +1,13 @@
 #include "ServerNetwork.h"
-
-#include "picojson.h"
+#include <iostream>
+//#include "picojson.h"
 //using namespace picojson;
+#include "json11.hpp"
 
 unsigned int ServerNetwork::client_id = 0;
 ServerNetwork::ServerNetwork(void)
 {
+	RecvBuffer = new char[DEFAULT_BUFLEN];
 	InitServer();
 }
 
@@ -127,35 +129,27 @@ void ServerNetwork::update()
 	int ErrorCode = 0;
 	while (true)
 	{
-		Sleep(1);
+		Sleep(1);//不要长时间占用CPU
 		if (this->acceptNewClient(client_id))//Not block
 		{
 			printf("client %d has been connected to the server\n", client_id);
 			client_id++;
 		}
 		auto it = sessions.begin();
+		std::string err;
 		if (it != sessions.end())
 		{
 			int res = recv(it->second, RecvBuffer, DEFAULT_BUFLEN - 1, 0);
 			if (res > 0)
 			{
-				//const char *Data = "hello";
-				//memcpy(RecvBuffer, Data , strlen(Data)+1);
 				RecvBuffer[res] = '\0';
 				std::string JsonCommandData(RecvBuffer);
-				picojson::value valueTemp;
-				std::string err = picojson::parse(valueTemp, JsonCommandData);
-				if (!err.empty())
-				{
-					//数据有错
-					std::cout << "Parse:"<<err << std::endl;
-				}
-				else
-				{
-					double TempValue = valueTemp.get("Data").get<double>(); 
-					printf("Data is:%lf\n", TempValue);
+				json11::Json Json1 = json11::Json::parse(JsonCommandData, err);
+				int Data1 = Json1["Data1"].int_value();
+				std::string StrValue1 = Json1["Value1"].string_value();
+				//std::string strResult = Json1.dump();
+				//std::cout << strResult << std::endl;
 
-				}
 				printf("rec:%d\n", res);
 			}
 			else if (res == -1)
@@ -189,14 +183,14 @@ void ServerNetwork::update()
 
 			//TestSendData
 			CountSend++;
-			if (CountSend % 100 == 0)
+			if (CountSend % 500 == 0)
 			{
-				
-				picojson::object tempObj;
-				tempObj["ReturnType"] = picojson::value((double)123);
-				picojson::value SendValue(tempObj);
-				std::string StrSend = SendValue.serialize();
-				send(it->second, StrSend.c_str(), (int)StrSend.length(),0);
+				//picojson::object tempObj;
+				//tempObj["ReturnType"] = picojson::value((double)123.4);
+				//tempObj["Value"] = picojson::value("Hello");
+				//picojson::value SendValue(tempObj);
+				//std::string StrSend = SendValue.serialize();
+				//send(it->second, StrSend.c_str(), (int)StrSend.length(),0);
 			}
 
 		}
@@ -210,6 +204,6 @@ void ServerNetwork::ErraseSession(UINT id)
 	{
 		closesocket(it->second);
 		sessions.erase(it);
-		printf("Erase A Session,Error:%d\n", WSAGetLastError());
+		printf("Erase SessionID: %d,Error:%d\n", id, WSAGetLastError());
 	}
 }

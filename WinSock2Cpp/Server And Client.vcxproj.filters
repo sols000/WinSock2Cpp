@@ -41,8 +41,5 @@
     <ClInclude Include="NetworkData.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="picojson.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
   </ItemGroup>
 </Project>
